@@ -9,22 +9,25 @@ var randomCountry = require('random-country')
 interface Props {
   weatherData: WeatherData
   cities: CityInfo[]
+  setBackgroundImage: (image: string) => void
 }
 
-console.log(randomCountry)
+//console.log(randomCountry)
 function MainDisplay(props: Props) {
 
   const [location, setLocation] = React.useState<string>("");
   const [weatherInfo, setWeatherInfo] = React.useState<WeatherData>(props.weatherData)
-  const [cityList, setCityList] = React.useState<CityInfo[]>(props.cities)
+  const defaultCityList = [{'name':'Tokyo'}, {'name':'Moscow'}, {'name':'Las Vegas'}, {'name':'Stockholm'}]
+  const [cityList, setCityList] = React.useState<CityInfo[]>(props.cities ? props.cities : defaultCityList)
   const [countryCode, setCountryCode] = React.useState<string>(randomCountry)
+  let desc: string = ""
   
+
   function handleWeatherInputChange(e: any) {
     setLocation(e.target.value)
   }
   
   async function weatherAPI() {
-    console.log("Location is ", location)    
     const route = `/api/weather`
     const response = await fetch(route,
       {
@@ -36,9 +39,30 @@ function MainDisplay(props: Props) {
       }
     )
     const data: WeatherData = await response.json()
-    console.log(data)
     setWeatherInfo(data);
-    console.log(data.current.weather_descriptions)
+    console.log(data.current.weather_descriptions[0])
+    desc = data.current.weather_descriptions[0]
+    const weatherDesc = data.current.weather_descriptions[0].toLowerCase()  
+    console.log(weatherDesc) 
+    if (weatherDesc.includes("sun")) {
+      props.setBackgroundImage("sunny.jpg")
+    } else if (weatherDesc.includes("snow")) {
+      props.setBackgroundImage("snow.jpg")
+    } else if (weatherDesc.includes("storm")) {
+      props.setBackgroundImage("stormy.jpg")
+    } else if (weatherDesc.includes("cloud")) {
+      props.setBackgroundImage("cloudy.jpg")
+    } else if (weatherDesc.includes("clear")) {
+      props.setBackgroundImage("clear.jpg")
+    } else if (weatherDesc.includes("rain")) {
+      props.setBackgroundImage("rain.jpg")
+    } else if (weatherDesc.includes("wind")) {
+      props.setBackgroundImage("windy.jpg")
+    } else if (weatherDesc.includes("overcast")) {
+      props.setBackgroundImage("overcast.jpg")
+    } else {
+      props.setBackgroundImage("default.jpg")
+    }
   }
 
   async function randomCities() {
@@ -56,49 +80,55 @@ function MainDisplay(props: Props) {
     )
     const data = await response.json()
     console.log(data)
-    setCityList(data)
+    if (data.length != 4) {
+      setCityList(defaultCityList)
+    } else {
+      setCityList(data)      
+    }
   }
 
   async function APIS() {
     weatherAPI()
-    randomCities()
+    randomCities()    
   }
 
     return (
-      <Box sx={{marginLeft: '5vw', marginRight: '5vw', backgroundImage: `url("src/app/pics/clear.jpg")`}}>
+      <Box sx={{marginLeft: '5vw', marginRight: '5vw'}}>
         <Grid2 container spacing={2}>
           <Grid2 size={8}>
-            <Typography>{weatherInfo.current.temperature}</Typography>
+            <Typography sx={{fontSize: 'h2.fontSize', }}>{weatherInfo.current.temperature}°</Typography>
             <Stack>
-              <Typography>{weatherInfo.location.name}</Typography>
-              <Typography>{weatherInfo.location.localtime}</Typography>
+              <Typography sx={{lineHeight: 1, fontSize: 'h1.fontSize'}}>{weatherInfo.location.name}</Typography>
+              <Typography sx={{fontSize: 'h4.fontSize'}}>{weatherInfo.location.localtime}</Typography>
             </Stack>
-            <Typography>{weatherInfo.current.weather_descriptions[0].desc}</Typography>
+            <Typography sx={{lineHeight: 1, fontSize: 'h3.fontSize'}}>{weatherInfo.current.weather_descriptions}</Typography>
           </Grid2>
-          <Grid2 size={4}>                        
+          <Grid2 size={4} sx={{backdropFilter: 'blur(5px)'}}>                        
             <TextField id="cityInput" label="Another Location" variant="standard" onChange={handleWeatherInputChange}/>
-            <Button variant="contained" sx={{marginLeft: '1vw'}} onClick={APIS} startIcon={<SearchIcon/>}></Button>
+            <Button variant="contained" size="large" sx={{marginLeft: '1vw'}} onClick={APIS} startIcon={<SearchIcon/>}></Button>
+            <br></br>
+            <br></br>
             <Stack>
               {cityList?.map((city, index) => (
-                <Typography key={index++}>{city?.name}</Typography>
+                <Typography sx={{fontSize: 'h6.fontSize', lineHeight: 2}} key={index++}>{city?.name}</Typography>
               ))}
             </Stack>
             <br></br>
             <br></br>
-            <Typography>Weather Details</Typography>
+            <Typography sx={{fontSize: 'h3.fontSize'}}>Weather Details</Typography>
             <Stack>
               <Grid2 container spacing={2}>
-                <Grid2 size={6} sx={{justifyContent: 'left'}}>
-                  <Typography>Cloudy</Typography>
-                  <Typography>Humidity</Typography>
-                  <Typography>Wind</Typography>
-                  <Typography>Rain</Typography>
+                <Grid2 size={6} sx={{justifyContent: 'left', paddingLeft: 1}}>
+                  <Typography sx={{fontSize: 'h6.fontSize'}}>Cloudy</Typography>
+                  <Typography sx={{fontSize: 'h6.fontSize'}}>Humidity</Typography>
+                  <Typography sx={{fontSize: 'h6.fontSize'}}>Wind</Typography>
+                  <Typography sx={{fontSize: 'h6.fontSize'}}>Rain</Typography>
                 </Grid2>
                 <Grid2 size={6} sx={{justifyContent: 'right'}}>
-                  <Typography>{weatherInfo.current.visibility}</Typography>
-                  <Typography>{weatherInfo.current.humidity}</Typography>
-                  <Typography>{weatherInfo.current.wind_speed}</Typography>
-                  <Typography>{weatherInfo.current.precip}</Typography>
+                  <Typography sx={{fontSize: 'h6.fontSize'}}>{weatherInfo.current.visibility}</Typography>
+                  <Typography sx={{fontSize: 'h6.fontSize'}}>{weatherInfo.current.humidity}</Typography>
+                  <Typography sx={{fontSize: 'h6.fontSize'}}>{weatherInfo.current.wind_speed}</Typography>
+                  <Typography sx={{fontSize: 'h6.fontSize'}}>{weatherInfo.current.precip}</Typography>
                   </Grid2>
                 </Grid2>
               </Stack>

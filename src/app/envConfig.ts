@@ -14,16 +14,13 @@ export interface Location {
 
 export interface Current {
     temperature: string
-    weather_descriptions: WeatherDesc[]
+    weather_descriptions: string[]
     wind_speed: string
     humidity: string
     visibility: string
     precip: string
 }
 
-export interface WeatherDesc {
-    desc: string
-}
 
 export interface CityInfo {
     name: string

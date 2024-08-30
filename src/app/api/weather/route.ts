@@ -18,7 +18,7 @@ export async function POST(request: Request) {
             )
             //console.log(response)
             const data = await response.json() as WeatherData
-            //console.log(data)
+            console.log(data)
             return NextResponse.json(data)
         }
         catch (error){
