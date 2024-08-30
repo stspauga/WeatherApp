@@ -96,14 +96,14 @@ function MainDisplay(props: Props) {
       <Box sx={{marginLeft: '5vw', marginRight: '5vw'}}>
         <Grid2 container spacing={2}>
           <Grid2 size={8}>
-            <Typography sx={{fontSize: 'h2.fontSize', }}>{weatherInfo.current.temperature}°</Typography>
+            <Typography sx={{fontSize: 'h2.fontSize', }}>{weatherInfo?.current.temperature}°</Typography>
             <Stack>
-              <Typography sx={{lineHeight: 1, fontSize: 'h1.fontSize'}}>{weatherInfo.location.name}</Typography>
-              <Typography sx={{fontSize: 'h4.fontSize'}}>{weatherInfo.location.localtime}</Typography>
+              <Typography sx={{lineHeight: 1, fontSize: 'h1.fontSize'}}>{weatherInfo?.location.name}</Typography>
+              <Typography sx={{fontSize: 'h4.fontSize'}}>{weatherInfo?.location.localtime}</Typography>
             </Stack>
-            <Typography sx={{lineHeight: 1, fontSize: 'h3.fontSize'}}>{weatherInfo.current.weather_descriptions}</Typography>
+            <Typography sx={{lineHeight: 1, fontSize: 'h3.fontSize'}}>{weatherInfo?.current.weather_descriptions}</Typography>
           </Grid2>
-          <Grid2 size={4} sx={{backdropFilter: 'blur(5px)'}}>                        
+          <Grid2 size={4} sx={{backdropFilter: 'blur(5px)', backgroundColor: 'rgba(0, 0, 0, 0.5)', padding: 1}}>                        
             <TextField id="cityInput" label="Another Location" variant="standard" onChange={handleWeatherInputChange}/>
             <Button variant="contained" size="large" sx={{marginLeft: '1vw'}} onClick={APIS} startIcon={<SearchIcon/>}></Button>
             <br></br>
@@ -125,10 +125,10 @@ function MainDisplay(props: Props) {
                   <Typography sx={{fontSize: 'h6.fontSize'}}>Rain</Typography>
                 </Grid2>
                 <Grid2 size={6} sx={{justifyContent: 'right'}}>
-                  <Typography sx={{fontSize: 'h6.fontSize'}}>{weatherInfo.current.visibility}</Typography>
-                  <Typography sx={{fontSize: 'h6.fontSize'}}>{weatherInfo.current.humidity}</Typography>
-                  <Typography sx={{fontSize: 'h6.fontSize'}}>{weatherInfo.current.wind_speed}</Typography>
-                  <Typography sx={{fontSize: 'h6.fontSize'}}>{weatherInfo.current.precip}</Typography>
+                  <Typography sx={{fontSize: 'h6.fontSize'}}>{weatherInfo?.current.visibility}</Typography>
+                  <Typography sx={{fontSize: 'h6.fontSize'}}>{weatherInfo?.current.humidity}</Typography>
+                  <Typography sx={{fontSize: 'h6.fontSize'}}>{weatherInfo?.current.wind_speed}</Typography>
+                  <Typography sx={{fontSize: 'h6.fontSize'}}>{weatherInfo?.current.precip}</Typography>
                   </Grid2>
                 </Grid2>
               </Stack>

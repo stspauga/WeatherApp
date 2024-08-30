@@ -32,30 +32,7 @@ export default function Home() {
     //console.log(data)
     setWeatherInfo(data);
     console.log(data.current.weather_descriptions[0])
-  }
-  
-  async function randomCities() {
-    setCountryCode(randomCountry)
-    //console.log(randomCountry())
-    const route = `/api/random_cities`
-    const response = await fetch(route,
-      {
-        method: 'POST',
-        headers: {
-          'Cache-Control': 'no-cache'
-        },
-        body: JSON.stringify(countryCode)
-      }
-    )
-    const data = await response.json()
-    //console.log(data)
-    setCities(data)
-  }
-
-  async function APIS() {
-    weatherAPI()
-    randomCities()
-    const weatherDesc = weatherInfo?.current.weather_descriptions[0].toLowerCase()
+    const weatherDesc = data?.current.weather_descriptions[0].toLowerCase()
     console.log(weatherDesc)
     if (weatherDesc?.includes("sun")) {
       setBackgroundImage("sunny.jpg")
@@ -79,16 +56,39 @@ export default function Home() {
       setBackgroundImage("defaultPic.jpg")
     }
   }
+  
+  async function randomCities() {
+    setCountryCode(randomCountry)
+    //console.log(randomCountry())
+    const route = `/api/random_cities`
+    const response = await fetch(route,
+      {
+        method: 'POST',
+        headers: {
+          'Cache-Control': 'no-cache'
+        },
+        body: JSON.stringify(countryCode)
+      }
+    )
+    const data = await response.json()
+    //console.log(data)
+    setCities(data)
+  }
+
+  async function APIS() {
+    weatherAPI()
+    randomCities()   
+  }
 
   return (
     <Paper sx={{marginX: '5vw', marginY: '5vw', paddingY: '3vh',  backgroundImage: `url("/pics/${backgroundImage}")`, backgroundSize: 'cover'}}>      
       {weatherInfo == undefined && 
       <div style={{textAlign: 'center'}}>
-        <Typography sx={{fontSize: "h5.fontSize", lineHeight: 3}}>Enter a city name to view it's weather details</Typography>
+        <Typography sx={{fontSize: "h5.fontSize", lineHeight: 3}}>Enter a city name to view its weather details</Typography>
         <TextField id="cityInput" label="Location" variant="standard" onChange={handleWeatherInputChange}/>
         <Button variant="contained" sx={{marginLeft: '1vw'}} onClick={APIS}>Search</Button>
       </div>}
-      {weatherInfo != undefined && <MainDisplay weatherData={weatherInfo} cities={cities!} setBackgroundImage={setBackgroundImage}/>}
+      {weatherInfo && <MainDisplay weatherData={weatherInfo} cities={cities!} setBackgroundImage={setBackgroundImage}/>}
     </Paper>
   )
 }
