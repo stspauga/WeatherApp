@@ -2,7 +2,7 @@ import { WeatherData } from "@/app/envConfig";
 import { NextResponse } from "next/server";
 
 
-export async function POST(request: Request, { params }: { params: {city_location: string }}) {
+export async function POST(request: Request) {
     const location = await request.json()
     const apiKey = process?.env?.APIKEY
     if (location) {
@@ -16,18 +16,18 @@ export async function POST(request: Request, { params }: { params: {city_locatio
                     }
                 }
             )
-            console.log(response)
+            //console.log(response)
             const data = await response.json() as WeatherData
-            console.log(data)
+            //console.log(data)
             return NextResponse.json(data)
         }
         catch (error){
-            console.log("In route.ts did not work")
-            console.log(error)
+            //console.log("In route.ts did not work")
+            //console.log(error)
             return NextResponse.json(error)
         }
     } else {
-        console.log("no body")
+        //console.log("no body")
         return NextResponse.json("")
     }
 }
