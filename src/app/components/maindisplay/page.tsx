@@ -1,10 +1,10 @@
+"use client"
 import { CityInfo, WeatherData } from "@/app/envConfig"
 import { Box, Button, Grid2, Stack, TextField, Typography } from "@mui/material"
-import React from "react"
+import React, {useState} from "react"
 import SearchIcon from '@mui/icons-material/Search';
 //import defaultPic from 'src/app/pics/defaultPic.jpg'
 var randomCountry = require('random-country')
-
 
 interface Props {
   weatherData: WeatherData
@@ -12,14 +12,13 @@ interface Props {
   setBackgroundImage: (image: string) => void
 }
 
-//console.log(randomCountry)
-function MainDisplay(props: Props) {
+const MainDisplay: any = (props: Props) => {
 
-  const [location, setLocation] = React.useState<string>("");
-  const [weatherInfo, setWeatherInfo] = React.useState<WeatherData>(props.weatherData)
+  const [location, setLocation] = useState<string>("");
+  const [weatherInfo, setWeatherInfo] = useState<WeatherData>(props.weatherData)
   const defaultCityList = [{'name':'Tokyo'}, {'name':'Moscow'}, {'name':'Las Vegas'}, {'name':'Stockholm'}]
-  const [cityList, setCityList] = React.useState<CityInfo[]>(props.cities ? props.cities : defaultCityList)
-  const [countryCode, setCountryCode] = React.useState<string>(randomCountry)
+  const [cityList, setCityList] = useState<CityInfo[]>(props.cities ? props.cities : defaultCityList)
+  const [countryCode, setCountryCode] = useState<string>(randomCountry)
   let desc: string = ""
   
 

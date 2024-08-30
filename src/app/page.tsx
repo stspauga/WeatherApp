@@ -1,16 +1,16 @@
 "use client"
 import { Button, Paper, TextField, Typography } from "@mui/material";
-import React from "react"
+import React, {useState} from "react"
 import { CityInfo, WeatherData } from "./envConfig";
 import MainDisplay from "./components/maindisplay/page";
 var randomCountry = require('random-country')
 
 export default function Home() {
-  const [location, setLocation] = React.useState<string>("");
-  const [weatherInfo, setWeatherInfo] = React.useState<WeatherData>();
-  const [countryCode, setCountryCode] = React.useState<string>(randomCountry)
-  const [cities, setCities] = React.useState<CityInfo[]>()
-  const [backgroundImage, setBackgroundImage] = React.useState<string>();
+  const [location, setLocation] = useState<string>("");
+  const [weatherInfo, setWeatherInfo] = useState<WeatherData>();
+  const [countryCode, setCountryCode] = useState<string>(randomCountry)
+  const [cities, setCities] = useState<CityInfo[]>()
+  const [backgroundImage, setBackgroundImage] = useState<string>();
 
   function handleWeatherInputChange(e: any) {
     setLocation(e.target.value)
