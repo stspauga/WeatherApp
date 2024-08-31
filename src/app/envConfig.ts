@@ -21,7 +21,12 @@ export interface Current {
     precip: string
 }
 
-
 export interface CityInfo {
     name: string
+}
+
+export interface ForecastObject {
+    mintemp: string
+    maxtemp: string
+    date: string
 }

@@ -3,7 +3,7 @@ import { CityInfo, WeatherData } from "@/app/envConfig"
 import { Box, Button, Grid2, Stack, TextField, Typography } from "@mui/material"
 import React, {useState} from "react"
 import SearchIcon from '@mui/icons-material/Search';
-//import defaultPic from 'src/app/pics/defaultPic.jpg'
+import ForecastDisplay from "../forecastdisplay/page";
 var randomCountry = require('random-country')
 
 interface Props {
@@ -15,11 +15,13 @@ interface Props {
 const MainDisplay: any = (props: Props) => {
 
   const [location, setLocation] = useState<string>("");
-  const [weatherInfo, setWeatherInfo] = useState<WeatherData>(props.weatherData)
+  const [weatherInfo, setWeatherInfo] = useState<WeatherData>(props?.weatherData)
   const defaultCityList = [{'name':'Tokyo'}, {'name':'Moscow'}, {'name':'Las Vegas'}, {'name':'Stockholm'}]
-  const [cityList, setCityList] = useState<CityInfo[]>(props.cities ? props.cities : defaultCityList)
+  const [cityList, setCityList] = useState<CityInfo[]>(props?.cities ? props.cities : defaultCityList)
   const [countryCode, setCountryCode] = useState<string>(randomCountry)
   let desc: string = ""
+  const [forecastArr, setForecastArr] = useState<any>()
+  let forecast: any[] = [];
   
 
   function handleWeatherInputChange(e: any) {
@@ -39,9 +41,9 @@ const MainDisplay: any = (props: Props) => {
     )
     const data: WeatherData = await response.json()
     setWeatherInfo(data);
-    console.log(data.current.weather_descriptions[0])
-    desc = data.current.weather_descriptions[0]
-    const weatherDesc = data.current.weather_descriptions[0].toLowerCase()  
+    console.log(data?.current?.weather_descriptions[0])
+    desc = data?.current?.weather_descriptions[0]
+    const weatherDesc = data?.current?.weather_descriptions[0]?.toLowerCase()  
     console.log(weatherDesc) 
     if (weatherDesc.includes("sun")) {
       props.setBackgroundImage("sunny.jpg")
@@ -86,23 +88,72 @@ const MainDisplay: any = (props: Props) => {
     }
   }
 
+  async function getForecast() {
+    const route = "/api/weather_forecast"
+    const response = await fetch(route,
+      {
+        method: 'POST',
+        headers: {
+          'Cache-Control': 'no-cache'
+        },
+        body: JSON.stringify(location)
+      }
+    )
+    const data = await response.json()
+    console.log(data)
+    nestedObject(data)
+    setForecastArr(forecast)
+  }
+
+  
+  function nestedObject(dataForecast: any) {
+    let key: any
+    let newForecastObj = {
+      mintemp: "",
+      maxtemp: "",
+      date: ""
+    }
+    for (key in dataForecast) {
+      if (dataForecast.hasOwnProperty(key)) {
+        if (typeof dataForecast[key] === 'object' && dataForecast[key] != null) {
+          nestedObject(dataForecast[key])
+        } else {
+          console.log(key + ": " + dataForecast[key]);
+          if (key == 'mintemp') {
+            newForecastObj.mintemp = dataForecast[key]
+          } else if (key == 'maxtemp') {
+            newForecastObj.maxtemp = dataForecast[key]
+          } else if (key == 'date') {
+            newForecastObj.date = dataForecast[key]
+          }
+        }
+      }
+      if (newForecastObj.mintemp != "" && newForecastObj.maxtemp != "" && newForecastObj.date != "") {
+        forecast.push(newForecastObj)
+        console.log("pushed")
+        break
+      }
+    }
+  }
+
   async function APIS() {
     weatherAPI()
     randomCities()    
+    getForecast()
   }
 
     return (
       <Box sx={{marginLeft: '5vw', marginRight: '5vw'}}>
         <Grid2 container spacing={2}>
           <Grid2 size={8}>
-            <Typography sx={{fontSize: 'h2.fontSize', }}>{weatherInfo?.current.temperature}°</Typography>
+            <Typography sx={{fontSize: 'h2.fontSize', }}>{weatherInfo?.current?.temperature}°</Typography>
             <Stack>
-              <Typography sx={{lineHeight: 1, fontSize: 'h1.fontSize'}}>{weatherInfo?.location.name}</Typography>
-              <Typography sx={{fontSize: 'h4.fontSize'}}>{weatherInfo?.location.localtime}</Typography>
+              <Typography sx={{lineHeight: 1, fontSize: 'h1.fontSize'}}>{weatherInfo?.location?.name}</Typography>
+              <Typography sx={{fontSize: 'h4.fontSize'}}>{weatherInfo?.location?.localtime}</Typography>
             </Stack>
-            <Typography sx={{lineHeight: 1, fontSize: 'h3.fontSize'}}>{weatherInfo?.current.weather_descriptions}</Typography>
+            <Typography sx={{lineHeight: 1, fontSize: 'h3.fontSize'}}>{weatherInfo?.current?.weather_descriptions}</Typography>
           </Grid2>
-          <Grid2 size={4} sx={{backdropFilter: 'blur(5px)', backgroundColor: 'rgba(0, 0, 0, 0.5)', padding: 1}}>                        
+          <Grid2 size={4} sx={{backdropFilter: 'blur(5px)', backgroundColor: 'rgba(0, 0, 0, 0.5)', padding: 3}}>                        
             <TextField id="cityInput" label="Another Location" variant="standard" onChange={handleWeatherInputChange}/>
             <Button variant="contained" size="large" sx={{marginLeft: '1vw'}} onClick={APIS} startIcon={<SearchIcon/>}></Button>
             <br></br>
@@ -124,15 +175,18 @@ const MainDisplay: any = (props: Props) => {
                   <Typography sx={{fontSize: 'h6.fontSize'}}>Rain</Typography>
                 </Grid2>
                 <Grid2 size={6} sx={{justifyContent: 'right'}}>
-                  <Typography sx={{fontSize: 'h6.fontSize'}}>{weatherInfo?.current.visibility}</Typography>
-                  <Typography sx={{fontSize: 'h6.fontSize'}}>{weatherInfo?.current.humidity}</Typography>
-                  <Typography sx={{fontSize: 'h6.fontSize'}}>{weatherInfo?.current.wind_speed}</Typography>
-                  <Typography sx={{fontSize: 'h6.fontSize'}}>{weatherInfo?.current.precip}</Typography>
+                  <Typography sx={{fontSize: 'h6.fontSize'}}>{weatherInfo?.current?.visibility}</Typography>
+                  <Typography sx={{fontSize: 'h6.fontSize'}}>{weatherInfo?.current?.humidity}</Typography>
+                  <Typography sx={{fontSize: 'h6.fontSize'}}>{weatherInfo?.current?.wind_speed}</Typography>
+                  <Typography sx={{fontSize: 'h6.fontSize'}}>{weatherInfo?.current?.precip}</Typography>
                   </Grid2>
                 </Grid2>
               </Stack>
             </Grid2>
           </Grid2>
+          <br></br>
+          <br></br>
+          <ForecastDisplay forecastArray={forecastArr}/>
         </Box>
     )
 }
