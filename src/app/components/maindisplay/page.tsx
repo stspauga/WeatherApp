@@ -7,6 +7,7 @@ import ForecastDisplay from "../forecastdisplay/page";
 var randomCountry = require('random-country')
 
 interface Props {
+  weatherForecast: any
   weatherData: WeatherData
   cities: CityInfo[]
   setBackgroundImage: (image: string) => void
@@ -41,10 +42,8 @@ const MainDisplay: any = (props: Props) => {
     )
     const data: WeatherData = await response.json()
     setWeatherInfo(data);
-    console.log(data?.current?.weather_descriptions[0])
     desc = data?.current?.weather_descriptions[0]
     const weatherDesc = data?.current?.weather_descriptions[0]?.toLowerCase()  
-    console.log(weatherDesc) 
     if (weatherDesc.includes("sun")) {
       props.setBackgroundImage("sunny.jpg")
     } else if (weatherDesc.includes("snow")) {
@@ -68,7 +67,6 @@ const MainDisplay: any = (props: Props) => {
 
   async function randomCities() {
     setCountryCode(randomCountry)
-    console.log(countryCode)
     const route = `/api/random_cities`
     const response = await fetch(route,
       {
@@ -80,7 +78,6 @@ const MainDisplay: any = (props: Props) => {
       }
     )
     const data = await response.json()
-    console.log(data)
     if (data.length != 4) {
       setCityList(defaultCityList)
     } else {
@@ -100,7 +97,6 @@ const MainDisplay: any = (props: Props) => {
       }
     )
     const data = await response.json()
-    console.log(data)
     nestedObject(data)
     setForecastArr(forecast)
   }
@@ -118,7 +114,6 @@ const MainDisplay: any = (props: Props) => {
         if (typeof dataForecast[key] === 'object' && dataForecast[key] != null) {
           nestedObject(dataForecast[key])
         } else {
-          console.log(key + ": " + dataForecast[key]);
           if (key == 'mintemp') {
             newForecastObj.mintemp = dataForecast[key]
           } else if (key == 'maxtemp') {
@@ -130,7 +125,6 @@ const MainDisplay: any = (props: Props) => {
       }
       if (newForecastObj.mintemp != "" && newForecastObj.maxtemp != "" && newForecastObj.date != "") {
         forecast.push(newForecastObj)
-        console.log("pushed")
         break
       }
     }

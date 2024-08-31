@@ -7,7 +7,7 @@ export async function POST(request: Request) {
     const apiKey = process?.env?.APIKEY
     if (location) {
         try {
-            const url = `https://api.weatherstack.com/current?access_key=${apiKey}&query=${location}`
+            const url = `https://api.weatherstack.com/current?access_key=f02b54b29e512419d64dbbc62f1606bd&query=${location}`
             const response = await fetch(url,
                 {
                     method: 'GET',
@@ -16,18 +16,13 @@ export async function POST(request: Request) {
                     }
                 }
             )
-            //console.log(response)
             const data = await response.json() as WeatherData
-            //console.log(data)
             return NextResponse.json(data)
         }
         catch (error){
-            //console.log("In route.ts did not work")
-            //console.log(error)
             return NextResponse.json(error)
         }
     } else {
-        //console.log("no body")
         return NextResponse.json("")
     }
 }

@@ -15,13 +15,11 @@ export async function POST(request: Request) {
                 }
             )
             const data = await response.json()
-            console.log(data)
             return NextResponse.json(data)
         } catch (error) {
             return NextResponse.json(error)
         }
     } else {
-        //console.log("no body")
         return NextResponse.json("")
     }
 }

@@ -17,18 +17,13 @@ export async function POST(request: Request) {
                     }
                 }
             )
-            //console.log(response)
             const data = await response.json() as WeatherData
-            //console.log(data)
             return NextResponse.json(data)
         }
         catch (error){
-            //console.log("In route.ts did not work")
-            //console.log(error)
             return NextResponse.json(error)
         }
     } else {
-        //console.log("no body")
         return NextResponse.json("")
     }
 }
