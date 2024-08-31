@@ -1,6 +1,6 @@
 import { ForecastObject } from "@/app/envConfig"
 import { Box, Stack, Table, TableCell, TableContainer, TableHead, TableRow, Typography } from "@mui/material"
-import { useState } from "react"
+import { Key, useState } from "react"
 
 interface Props {
     forecastArray: any
@@ -20,8 +20,8 @@ const ForecastDisplay = (props: Props) => {
                 <Table>
                     <TableHead>
                         <TableRow>
-                            {props?.forecastArray?.map((forecast: ForecastObject) => (
-                                <TableCell>
+                            {props?.forecastArray?.map((forecast: ForecastObject, index: Key | null | undefined) => (
+                                <TableCell key={index}>
                                     <Stack>
                                         <Typography sx={{...forecastDisplayStyle}}>Date : {forecast.date}</Typography>
                                         <Typography sx={{...forecastDisplayStyle}}>Max temp : {forecast.maxtemp}</Typography>

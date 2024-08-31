@@ -136,6 +136,7 @@ export default function Home() {
     weatherAPI()
     randomCities()   
     getForecast()
+    console.log(forecast)
   }
 
   async function LocationAPIS() {
@@ -159,7 +160,7 @@ export default function Home() {
           <Button variant="contained" sx={{marginLeft: '1vw'}} onClick={LocationAPIS}>Current Location</Button>
         </div>
       </div>}
-      {weatherInfo && <MainDisplay weatherForecast={forecastArr} weatherData={weatherInfo} cities={cities!} setBackgroundImage={setBackgroundImage}/>}
+      {weatherInfo && <MainDisplay weatherForecast={forecast} weatherData={weatherInfo} cities={cities!} setBackgroundImage={setBackgroundImage}/>}
     </Paper>
   )
 }

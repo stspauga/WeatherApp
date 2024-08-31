@@ -21,7 +21,7 @@ const MainDisplay: any = (props: Props) => {
   const [cityList, setCityList] = useState<CityInfo[]>(props?.cities ? props.cities : defaultCityList)
   const [countryCode, setCountryCode] = useState<string>(randomCountry)
   let desc: string = ""
-  const [forecastArr, setForecastArr] = useState<any>()
+  const [forecastArr, setForecastArr] = useState<any>(props.weatherForecast)
   let forecast: any[] = [];
   
 
@@ -180,7 +180,7 @@ const MainDisplay: any = (props: Props) => {
           </Grid2>
           <br></br>
           <br></br>
-          <ForecastDisplay forecastArray={forecastArr}/>
+          <ForecastDisplay forecastArray={forecastArr ? forecastArr : props?.weatherForecast}/>
         </Box>
     )
 }
