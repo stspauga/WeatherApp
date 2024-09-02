@@ -91,13 +91,15 @@ const MainDisplay: any = (props: Props) => {
 
   async function getForecast() {
     const route = "/api/weather_forecast"
+    let tempLoc;
+    currnetLocationFlag ? tempLoc = newLocation : tempLoc = location
     const response = await fetch(route,
       {
         method: 'POST',
         headers: {
           'Cache-Control': 'no-cache'
         },
-        body: JSON.stringify(location)
+        body: JSON.stringify(tempLoc)
       }
     )
     const data = await response.json()
@@ -146,6 +148,7 @@ const MainDisplay: any = (props: Props) => {
     newLocation = data.address.city
     setLocation(newLocation)
     weatherAPI()
+    getForecast()
   }
 
   async function APIS() {
@@ -157,7 +160,6 @@ const MainDisplay: any = (props: Props) => {
   async function LocalAPIS() {
     getCurrentLocWeatherDetails()
     randomCities()
-    getForecast()
   }
 
     return (
