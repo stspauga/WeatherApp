@@ -4,6 +4,7 @@ import { Box, Button, Grid2, Stack, TextField, Typography } from "@mui/material"
 import React, {useState} from "react"
 import SearchIcon from '@mui/icons-material/Search';
 import ForecastDisplay from "../forecastdisplay/page";
+import Footer from "../footer/page";
 var randomCountry = require('random-country')
 
 interface Props {

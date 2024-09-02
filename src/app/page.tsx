@@ -1,8 +1,11 @@
 "use client"
-import { Button, Divider, Paper, Stack, TextField, Typography } from "@mui/material";
+import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Divider, IconButton, Paper, Stack, TextField, Typography } from "@mui/material";
 import React, {useState} from "react"
 import { CityInfo, WeatherData } from "./envConfig";
 import MainDisplay from "./components/maindisplay/page";
+import Footer from "./components/footer/page";
+import CloseIcon from '@mui/icons-material/Close';
+import Link from "next/link";
 var randomCountry = require('random-country')
 
 export default function Home() {
@@ -15,6 +18,14 @@ export default function Home() {
   let forecast:any = []
   let currentLocationFlag: boolean = false;
   let newLocation: any;
+  const [open, setOpen] = React.useState(false);
+
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+  const handleClose = () => {
+    setOpen(false);
+  };
 
 
   function handleWeatherInputChange(e: any) {
@@ -163,6 +174,51 @@ export default function Home() {
         </div>
       </Stack>}
       {weatherInfo && <MainDisplay weatherForecast={forecastArr} weatherData={weatherInfo} cities={cities!} setBackgroundImage={setBackgroundImage}/>}
+      <br></br>
+      <Footer handleClickOpen={handleClickOpen}/>
+      <Dialog
+        onClose={handleClose}
+        aria-labelledby="customized-dialog-title"
+        open={open}
+      >
+        <DialogTitle sx={{ m: 0, p: 2 }} id="customized-dialog-title">
+          <Link 
+            href={"https://www.linkedin.com/school/productmanagerinterview/"} 
+            target="_blank" 
+            style={{
+            color: 'blue',
+            textDecoration: 'underline',
+            cursor: 'pointer',
+          }}>Product Manager Accelerator</Link>
+        </DialogTitle>
+        <IconButton
+          aria-label="close"
+          onClick={handleClose}
+          sx={(theme) => ({
+            position: 'absolute',
+            right: 8,
+            top: 8,
+            color: theme.palette.grey[500],
+          })}
+        >
+          <CloseIcon />
+        </IconButton>
+        <DialogContent dividers>
+          <Typography gutterBottom>
+          The Product Manager Accelerator Program is designed 
+          to support PM professionals through every stage of their career. 
+          From students looking for entry-level jobs to Directors 
+          looking to take on a leadership role, our program has 
+          helped over hundreds of students fulfill their career aspirations.
+          </Typography>
+          <Typography gutterBottom>
+          Our Product Manager Accelerator community are ambitious 
+          and committed. Through our program they have learnt, 
+          honed and developed new PM and leadership skills, 
+          giving them a strong foundation for their future endeavours.
+          </Typography>
+        </DialogContent>        
+      </Dialog>
     </Paper>
   )
 }
