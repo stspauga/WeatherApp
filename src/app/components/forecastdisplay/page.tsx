@@ -6,7 +6,7 @@ interface Props {
     forecastArray: any
 }
 
-const ForecastDisplay = (props: Props) => {
+const ForecastDisplay: any = (props: Props) => {
 
     const forecastDisplayStyle = {
         fontSize: "h6.fontSize",
