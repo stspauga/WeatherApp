@@ -13,7 +13,7 @@ export default function Home() {
   const [backgroundImage, setBackgroundImage] = useState<string>("defaultPic.jpg");
   const [forecastArr, setForecastArr] = useState<any>()
   let forecast:any = []
-  let currnetLocationFlag: boolean = false;
+  let currentLocationFlag: boolean = false;
   let newLocation: any;
 
 
@@ -24,7 +24,7 @@ export default function Home() {
   async function weatherAPI() {  
     const route = `/api/weather`
     let tempLoc;
-    currnetLocationFlag ? tempLoc = newLocation : tempLoc = location
+    currentLocationFlag ? tempLoc = newLocation : tempLoc = location
     const response = await fetch(route,
       {
         method: 'POST',
@@ -77,13 +77,15 @@ export default function Home() {
 
   async function getForecast() {
     const route = "/api/weather_forecast"
+    let tempLoc;
+    currentLocationFlag ? tempLoc = newLocation : tempLoc = location
     const response = await fetch(route,
       {
         method: 'POST',
         headers: {
           'Cache-Control': 'no-cache'
         },
-        body: JSON.stringify(location)
+        body: JSON.stringify(tempLoc)
       }
     )
     const data = await response.json()
@@ -92,7 +94,7 @@ export default function Home() {
   }
 
   async function getCurrentLocWeatherDetails() {
-    currnetLocationFlag = true;
+    currentLocationFlag = true;
     const route = "/api/current_location_weather"
     const response = await fetch(route,
       {
@@ -100,8 +102,10 @@ export default function Home() {
       }
     )
     const data = await response.json()
-    newLocation = data.address.city
+    newLocation = data.address.city   
+    setLocation(newLocation)
     weatherAPI()
+    getForecast()
   }
 
   function nestedObject(dataForecast: any) {
@@ -136,13 +140,11 @@ export default function Home() {
     weatherAPI()
     randomCities()   
     getForecast()
-    //console.log(forecast)
   }
 
   async function LocationAPIS() {
     getCurrentLocWeatherDetails()
     randomCities()
-    getForecast()
   }
 
   return (

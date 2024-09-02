@@ -14,7 +14,6 @@ interface Props {
 }
 
 const MainDisplay: any = (props: Props) => {
-  console.log(props.weatherForecast)
   const [location, setLocation] = useState<string>("");
   const [weatherInfo, setWeatherInfo] = useState<WeatherData>(props?.weatherData)
   const defaultCityList = [{'name':'Tokyo'}, {'name':'Moscow'}, {'name':'Las Vegas'}, {'name':'Stockholm'}]
@@ -22,7 +21,6 @@ const MainDisplay: any = (props: Props) => {
   const [countryCode, setCountryCode] = useState<string>(randomCountry)
   let desc: string = ""
   const [forecastArr, setForecastArr] = useState<any>(props.weatherForecast)
-  console.log(forecastArr)
   let forecast: any[] = [];
   let currnetLocationFlag: boolean = false;
   let newLocation: any;
