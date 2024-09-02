@@ -4,7 +4,7 @@ import { NextResponse } from "next/server";
 
 export async function POST(request: Request) {
     const country_code = await request.json()
-    const apiKey = process?.env?.APIKEY
+    //const apiKey = process?.env?.APIKEY
     if (country_code) {
         try {
             const url = `https://api.api-ninjas.com/v1/city?limit=4&country=${country_code}`

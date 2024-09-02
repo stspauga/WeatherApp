@@ -2,10 +2,10 @@ import { NextResponse } from "next/server"
 
 export async function POST(request: Request) {
     const city = await request.json()
-    const apiKey = process?.env?.APIKEY
+    //const apiKey = process?.env?.APIKEY
     if (city) {
         try {
-            const url = `http://api.weatherstack.com/forecast?access_key=${apiKey}&query=${city}&forecast_days=5`
+            const url = `http://api.weatherstack.com/forecast?access_key=f02b54b29e512419d64dbbc62f1606b&query=${city}&forecast_days=5`
             const response = await fetch(url, 
                 {
                     method: 'GET',
@@ -23,3 +23,5 @@ export async function POST(request: Request) {
         return NextResponse.json("")
     }
 }
+
+export const runtime = 'edge'

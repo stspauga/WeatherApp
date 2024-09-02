@@ -4,7 +4,7 @@ import { NextResponse } from "next/server";
 
 export async function POST(request: Request) {
     const location = await request.json()
-    const apiKey = process?.env?.APIKEY
+    //const apiKey = process?.env?.APIKEY
     if (location) {
         try {
             const url = `https://api.weatherstack.com/current?access_key=f02b54b29e512419d64dbbc62f1606bd&query=${location}`
