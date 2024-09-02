@@ -1,5 +1,5 @@
 "use client"
-import { Button, Divider, Paper, TextField, Typography } from "@mui/material";
+import { Button, Divider, Paper, Stack, TextField, Typography } from "@mui/material";
 import React, {useState} from "react"
 import { CityInfo, WeatherData } from "./envConfig";
 import MainDisplay from "./components/maindisplay/page";
@@ -10,7 +10,7 @@ export default function Home() {
   const [weatherInfo, setWeatherInfo] = useState<WeatherData>();
   const [countryCode, setCountryCode] = useState<string>(randomCountry)
   const [cities, setCities] = useState<CityInfo[]>()
-  const [backgroundImage, setBackgroundImage] = useState<string>();
+  const [backgroundImage, setBackgroundImage] = useState<string>("defaultPic.jpg");
   const [forecastArr, setForecastArr] = useState<any>()
   let forecast:any = []
   let currnetLocationFlag: boolean = false;
@@ -136,7 +136,7 @@ export default function Home() {
     weatherAPI()
     randomCities()   
     getForecast()
-    console.log(forecast)
+    //console.log(forecast)
   }
 
   async function LocationAPIS() {
@@ -148,7 +148,7 @@ export default function Home() {
   return (
     <Paper sx={{marginX: '5vw', marginY: '5vw', paddingY: '3vh',  backgroundImage: `url("/pics/${backgroundImage}")`, backgroundSize: 'cover'}}>      
       {weatherInfo == undefined && 
-      <div style={{justifyContent: 'center', display: 'row'}}>
+      <Stack style={{textAlign: 'center'}}>
         <div>
           <Typography sx={{fontSize: "h5.fontSize", lineHeight: 3}}>Enter a city name to view its weather details</Typography>
           <TextField id="cityInput" label="Location" variant="standard" onChange={handleWeatherInputChange}/>
@@ -159,8 +159,8 @@ export default function Home() {
           <Typography sx={{fontSize: "h5.fontSize", lineHeight: 3}}>Click here to get weather details for current location</Typography>
           <Button variant="contained" sx={{marginLeft: '1vw'}} onClick={LocationAPIS}>Current Location</Button>
         </div>
-      </div>}
-      {weatherInfo && <MainDisplay weatherForecast={forecast} weatherData={weatherInfo} cities={cities!} setBackgroundImage={setBackgroundImage}/>}
+      </Stack>}
+      {weatherInfo && <MainDisplay weatherForecast={forecastArr} weatherData={weatherInfo} cities={cities!} setBackgroundImage={setBackgroundImage}/>}
     </Paper>
   )
 }
